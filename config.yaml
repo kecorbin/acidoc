@@ -1,0 +1,35 @@
+host: http://10.10.10.10/
+name: admin
+passwd: PDFLKJDSF 
+
+
+filename: test.xlsx
+tabs : {
+        'Switches' : {
+            'class' : 'fabricNode',
+            'columns' : ['name','role','fabricSt','serial','vendor','id'],
+            },
+        'Topology' : {
+            'class' : 'lldpAdjEp',
+            'columns' : ['dn', 'capability', 'chassisIdT', 'chassisIdV', 'id', 'mgmtIp', 'portDesc', 'portIdT', 'portIdV', 'sysName', 'sysDesc'],
+            },
+        'Tenants' : {
+            'class' : 'fvTenant',
+            'columns' : ['name','dn'],
+            },
+        'Applications' : {
+            'class' : 'fvAp',
+            'columns' : ['name','dn'],
+            },
+        'Subnets' : {
+            'class' : 'fvSubnet',
+            'columns' : ['rn','ip','scope'],
+            },
+         
+        'Endpoints' : {
+            'class' : 'fvCEp',
+            'columns' : ['lcC','ip','mac','encap'],
+            }
+    }
+
+
