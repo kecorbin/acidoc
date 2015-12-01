@@ -8,7 +8,7 @@ from cobra.mit.request import DnQuery, ClassQuery
 import yaml
 import httplib
 
-httplib.HTTPConnection.debuglevel = 1
+#httplib.HTTPConnection.debuglevel = 1
 tabs = []
 
 def new_worksheet(workbook,name):

@@ -1,6 +1,6 @@
-host: http://10.10.10.10/
+host: http://apic1/
 name: admin
-passwd: PDFLKJDSF 
+passwd: password
 
 
 filename: test.xlsx
