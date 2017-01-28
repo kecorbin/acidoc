@@ -29,7 +29,11 @@ tabs : {
         'Endpoints' : {
             'class' : 'fvCEp',
             'columns' : ['lcC','ip','mac','encap'],
-            }
+            },
+        'Faults': {
+            'class': 'faultInst',
+            'columns': ['ack','code','severity','delegated','descr','domain','type']
+        }
     }
 
 
