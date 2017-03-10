@@ -1,8 +1,8 @@
 acidoc
 ======
 
-ACIDoc will document pertitent information about the configuration of a Cisco ACI fabric into Spreadsheet format, turns
-sometimes that's still the best way to pass information around.
+ACIDoc will document pertitent information about the configuration of a Cisco ACI fabric into Spreadsheet format,
+it turns out sometimes that's still the best way to pass information around.
 
 The contents and structure of the outputed format is very easy to customize
 of the output is easily changed by modifying the [config.yml](config.yaml) file
@@ -41,5 +41,5 @@ You'll also likely want to change the filename which will be output by the tools
 
 Generating your spreadsheet is now a matter of running
 
-    python ac-doc.py
+    python aci-doc.py
 
