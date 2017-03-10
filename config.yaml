@@ -33,6 +33,10 @@ tabs : {
         'Faults': {
             'class': 'faultInst',
             'columns': ['ack','code','severity','delegated','descr','domain','type']
+        },
+        'Audit Logs': {
+            'class' : 'aaaModLR',
+            'columns' : ['dn','id', 'affected', 'user','severity','descr','created','cause','changeSet']
         }
     }
 
