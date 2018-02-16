@@ -1,27 +1,29 @@
-filename: test.xlsx
+filename: aci-doc.xlsx
 tabs:
   Applications:
     class: fvAp
-    columns: [name, dn]
-  Audit Logs:
-    class: aaaModLR
-    columns: [dn, id, affected, user, severity, descr, created, cause, changeSet]
-  Endpoints:
-    class: fvCEp
-    columns: [lcC, ip, mac, encap]
-  Faults:
-    class: faultInst
-    columns: [ack, code, severity, delegated, descr, domain, type]
+    headers: [Name, Distinguished Name]
+    properties: [name, dn]
+
+  # Audit Logs:
+  #   class: aaaModLR
+  #   properties: [dn, id, affected, user, severity, descr, created, cause, changeSet]
+  # Endpoints:
+  #   class: fvCEp
+  #   properties: [lcC, ip, mac, encap]
+  # Faults:
+  #   class: faultInst
+  #   properties: [ack, code, severity, delegated, descr, domain, type]
   Subnets:
     class: fvSubnet
-    columns: [name, ip, scope]
+    properties: [name, ip, scope]
   Switches:
     class: fabricNode
-    columns: [name, role, fabricSt, serial, vendor, id]
+    properties: [name, role, fabricSt, serial, vendor, id]
   Tenants:
     class: fvTenant
-    columns: [name, dn]
+    properties: [name, dn]
   Topology:
     class: lldpAdjEp
-    columns: [dn, capability, chassisIdT, chassisIdV, id, mgmtIp, portDesc, portIdT,
+    properties: [dn, capability, chassisIdT, chassisIdV, id, mgmtIp, portDesc, portIdT,
       portIdV, sysName, sysDesc]
