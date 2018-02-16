@@ -75,6 +75,8 @@ Would produce the following sheet named `Applications`
 |---|---|
 |app1|uni/tn-tenant1/ap-app1|
 
+The [config.yml](./config.yml) also contains several other common classes as a starting point.  
+
 ## Running
 
 Generating your spreadsheet is now a matter of running

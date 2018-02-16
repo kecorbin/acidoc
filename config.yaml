@@ -5,6 +5,7 @@ tabs:
     headers: [Name, Distinguished Name]
     properties: [name, dn]
 
+  # Some of these queries could take some time on large fabrics
   # Audit Logs:
   #   class: aaaModLR
   #   properties: [dn, id, affected, user, severity, descr, created, cause, changeSet]
@@ -14,6 +15,7 @@ tabs:
   # Faults:
   #   class: faultInst
   #   properties: [ack, code, severity, delegated, descr, domain, type]
+
   Subnets:
     class: fvSubnet
     properties: [name, ip, scope]
