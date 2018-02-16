@@ -1,15 +1,25 @@
 #!/usr/bin/env python
 
 import xlsxwriter
-import cobra.mit.access
-import cobra.mit.session
-import cobra.mit.request
-from cobra.mit.request import DnQuery, ClassQuery
+from acitoolkit import Session, Credentials
+
 import yaml
 import httplib
 
 #httplib.HTTPConnection.debuglevel = 1
 tabs = []
+
+def class_query(session, kls, parentDn=None):
+    """
+    query ACI based on class
+    """
+
+    if parentDn:
+        url = '/api/mo/{}.json?query-target=children&target-subtree-class={}'.format(parentDn, kls)
+    else:
+        url = '/api/class/{}.json'.format(kls)
+    resp = session.get(url)
+    return resp.json()['imdata']
 
 def new_worksheet(workbook,name):
     '''
@@ -26,96 +36,84 @@ def new_worksheet(workbook,name):
             break
     return sheet
 
-
-def fabricPathEpResolver(md,mac):
-    c = ClassQuery('fvCEp')
-    c.propFilter='and(eq(fvCEp.mac, "%s"))' % mac
-    dn = str(md.query(c)[0].dn)
-    q=DnQuery(dn)
-    q.queryTarget = 'children'
-    q.subtree = 'full'
-    q.classFilter='fvRsCEpToPathEp'
-    children = md.query(q)
-    plist = []
-
-    for o in children:
-        plist.append(o.tDn)
-
-    return plist
-
-
-
-
-def createWorkSheet(md, workbook, sheetname, cls, columns):
+def createWorkSheet(session, workbook, sheetname, kls, columns):
     outline = workbook.add_format()
     outline.set_border()
     sheet = new_worksheet(workbook, str(sheetname))
+    print("Collecting information for {}".format(sheetname))
     row,col = 0,0
     for f in columns:
         sheet.write(row,col,f,outline)
         col += 1
     row,col = 1,0
-    mos = md.lookupByClass(cls)
+    mos = class_query(session, kls)
     for i in mos:
-        l = [str(getattr(i, s)) for s in columns]
-        for i in l:
-            sheet.write(row,col,i,outline)
+        vals = [str(i[kls]['attributes'][s]) for s in columns ]
+        for v in vals:
+            sheet.write(row,col,v,outline)
             col += 1
         row += 1
         col = 0
 
-def createTenantSheet(md, workbook,t):
-    # creates a worksheet for a Tenant
+def createTenantSheet(session, workbook,t):
+    """
+    creates a tab in workbook for tenant t using acitoolkit session
+    """
     bold = workbook.add_format({'bold': 1})
     outline = workbook.add_format()
     outline.set_border()
-    sheet = new_worksheet(workbook,str(t.name))
+    sheet = new_worksheet(workbook,str(t['fvTenant']['attributes']['name']))
     row ,col = 0,0
     headers = ['Application','EPGs','Bridge-Domain','Endpoints']
     for h in headers:
         sheet.write(row,col,h,bold)
         col +=1
     row,col = 1,0
-    for ap in md.lookupByClass('fvAp',parentDn=t.dn):
-        sheet.write(row,col,ap.name,outline)
-        col += 1
-        for epg in md.lookupByClass('fvAEPg',parentDn=ap.dn):
-            sheet.write(row,col,epg.name,outline)
-            sheet.write(0,col,ap.name,outline)
-            bd = md.lookupByClass('fvRsBd',parentDn=epg.dn)
-            sheet.write(row, 0, ap.name,outline)
-            sheet.write(row, col+1, bd[0].tRn,outline)
-            row += 1
 
-            '''
-            epc = col + 2
-            for cep in md.lookupByClass('fvCEp', parentDn=epg.dn):
-                sheet.write(row, 0, ap.name,outline)
-                sheet.write(row, 1, epg.name,outline)
-                sheet.write(row, 2, bd[0].tRn,outline)
-                sheet.write(row, epc, cep.ip,outline)
-                sheet.write(row, epc+1, cep.mac,outline)
-                epc += 1
-                for p in fabricPathEpResolver(md,cep.mac):
-                    sheet.write(row, epc+2, p, outline)
-                    epc += 1
-                row += 1
-            '''
+    for ap in class_query(session, 'fvAp', parentDn=t['fvTenant']['attributes']['dn']):
+        app_name = ap['fvAp']['attributes']['name']
+        app_dn = ap['fvAp']['attributes']['dn']
+        sheet.write(row,col, app_name, outline)
+        col += 1
+        for epg in class_query(session, 'fvAEPg', parentDn=app_dn):
+            epg_dn = epg['fvAEPg']['attributes']['dn']
+            epg_name = epg['fvAEPg']['attributes']['name']
+            sheet.write(row, col, epg_name, outline)
+            sheet.write(0, col, app_name, outline)
+            bd = class_query(session, 'fvRsBd', parentDn=epg_dn)
+            bd_name = bd[0]['fvRsBd']['attributes']['tRn']
+            sheet.write(row, 0, app_name, outline)
+            sheet.write(row, col+1, bd_name, outline)
+            row += 1
         col -= 1
 
-def CreateWorkBook(md,xls,tabs):
+def CreateWorkBook(session, xls, tabs):
     workbook = xlsxwriter.Workbook(xls)
     for k in tabs:
-        createWorkSheet(md,workbook, k,tabs[k]['class'], tabs[k]['columns'])
-    for t in md.lookupByClass('fvTenant', parentDn='uni'):
-        createTenantSheet(md,workbook,t)
+        createWorkSheet(session ,workbook, k,tabs[k]['class'], tabs[k]['columns'])
+    tenants = class_query(session, 'fvTenant')
+    for t in tenants:
+        createTenantSheet(session,workbook,t)
     workbook.close()
 
 
-with open('config.yaml', 'r') as config:
-    config = yaml.safe_load(config)
-hostname, username, password = config['host'], config['name'], config['passwd']
-ls = cobra.mit.session.LoginSession(hostname, username, password)
-md = cobra.mit.access.MoDirectory(ls)
-md.login()
-CreateWorkBook(md, config['filename'], config['tabs'])
+if __name__ == "__main__":
+
+    description = 'aci-doc'
+
+    # Gather credentials for ACI
+    creds = Credentials('apic', description)
+    args = creds.get()
+
+    # Establish an API session to the APIC
+    apic = Session(args.url, args.login, args.password)
+
+    if apic.login().ok:
+        print("Connected to ACI")
+
+    print("depending on your configuration, this could take a little while...")
+
+    with open('config.yaml', 'r') as config:
+        config = yaml.safe_load(config)
+
+    CreateWorkBook(apic, config['filename'], config['tabs'])

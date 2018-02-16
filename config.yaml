@@ -1,32 +1,28 @@
-host: http://apic1/
-name: admin
-passwd: password
-
 
 filename: test.xlsx
 tabs : {
-        'Switches' : {
+        'Switches': {
             'class' : 'fabricNode',
             'columns' : ['name','role','fabricSt','serial','vendor','id'],
             },
-        'Topology' : {
+        'Topology': {
             'class' : 'lldpAdjEp',
             'columns' : ['dn', 'capability', 'chassisIdT', 'chassisIdV', 'id', 'mgmtIp', 'portDesc', 'portIdT', 'portIdV', 'sysName', 'sysDesc'],
             },
-        'Tenants' : {
+        'Tenants': {
             'class' : 'fvTenant',
             'columns' : ['name','dn'],
             },
-        'Applications' : {
+        'Applications': {
             'class' : 'fvAp',
             'columns' : ['name','dn'],
             },
-        'Subnets' : {
+        'Subnets': {
             'class' : 'fvSubnet',
-            'columns' : ['rn','ip','scope'],
+            'columns' : ['name','ip','scope'],
             },
-         
-        'Endpoints' : {
+
+        'Endpoints': {
             'class' : 'fvCEp',
             'columns' : ['lcC','ip','mac','encap'],
             },
@@ -39,5 +35,3 @@ tabs : {
             'columns' : ['dn','id', 'affected', 'user','severity','descr','created','cause','changeSet']
         }
     }
-
-
