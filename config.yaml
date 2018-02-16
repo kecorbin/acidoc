@@ -27,3 +27,7 @@ tabs:
     class: lldpAdjEp
     properties: [dn, capability, chassisIdT, chassisIdV, id, mgmtIp, portDesc, portIdT,
       portIdV, sysName, sysDesc]
+  Interface Errors:
+    class: rmonDot3Stats
+    headers: [Interface Name, Alignment Errors, Carrier Sense Errors, FCS Errors, Ingress Pause Frames]
+    properties: [dn, alignmentErrors, carrierSenseErrors, fCSErrors, inPauseFrames]
