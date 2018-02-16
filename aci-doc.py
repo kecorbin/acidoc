@@ -36,19 +36,29 @@ def new_worksheet(workbook,name):
             break
     return sheet
 
-def createWorkSheet(session, workbook, sheetname, kls, columns):
+def createWorkSheet(session, workbook, sheetname, kls, properties, headers=None):
     outline = workbook.add_format()
     outline.set_border()
     sheet = new_worksheet(workbook, str(sheetname))
     print("Collecting information for {}".format(sheetname))
     row,col = 0,0
-    for f in columns:
+
+    if headers is None:
+        headers = properties
+
+    bold = workbook.add_format({'bold': 1})
+    for h in headers:
+        sheet.write(row,col,h,bold)
+        col +=1
+    row,col = 1,0
+
+    for f in properties:
         sheet.write(row,col,f,outline)
         col += 1
     row,col = 1,0
     mos = class_query(session, kls)
     for i in mos:
-        vals = [str(i[kls]['attributes'][s]) for s in columns ]
+        vals = [str(i[kls]['attributes'][s]) for s in properties ]
         for v in vals:
             sheet.write(row,col,v,outline)
             col += 1
@@ -90,7 +100,13 @@ def createTenantSheet(session, workbook,t):
 def CreateWorkBook(session, xls, tabs):
     workbook = xlsxwriter.Workbook(xls)
     for k in tabs:
-        createWorkSheet(session ,workbook, k,tabs[k]['class'], tabs[k]['columns'])
+        createWorkSheet(session,
+                        workbook,
+                        k,
+                        tabs[k]['class'],
+                        tabs[k]['properties'],
+                        headers=tabs.get(k).get('headers'))
+
     tenants = class_query(session, 'fvTenant')
     for t in tenants:
         createTenantSheet(session,workbook,t)
