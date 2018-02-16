@@ -1,43 +1,29 @@
-host: http://apic1/
-name: admin
-passwd: password
+filename: aci-doc.xlsx
+tabs:
+  Applications:
+    class: fvAp
+    headers: [Name, Distinguished Name]
+    properties: [name, dn]
 
-
-filename: test.xlsx
-tabs : {
-        'Switches' : {
-            'class' : 'fabricNode',
-            'columns' : ['name','role','fabricSt','serial','vendor','id'],
-            },
-        'Topology' : {
-            'class' : 'lldpAdjEp',
-            'columns' : ['dn', 'capability', 'chassisIdT', 'chassisIdV', 'id', 'mgmtIp', 'portDesc', 'portIdT', 'portIdV', 'sysName', 'sysDesc'],
-            },
-        'Tenants' : {
-            'class' : 'fvTenant',
-            'columns' : ['name','dn'],
-            },
-        'Applications' : {
-            'class' : 'fvAp',
-            'columns' : ['name','dn'],
-            },
-        'Subnets' : {
-            'class' : 'fvSubnet',
-            'columns' : ['rn','ip','scope'],
-            },
-         
-        'Endpoints' : {
-            'class' : 'fvCEp',
-            'columns' : ['lcC','ip','mac','encap'],
-            },
-        'Faults': {
-            'class': 'faultInst',
-            'columns': ['ack','code','severity','delegated','descr','domain','type']
-        },
-        'Audit Logs': {
-            'class' : 'aaaModLR',
-            'columns' : ['dn','id', 'affected', 'user','severity','descr','created','cause','changeSet']
-        }
-    }
-
-
+  # Audit Logs:
+  #   class: aaaModLR
+  #   properties: [dn, id, affected, user, severity, descr, created, cause, changeSet]
+  # Endpoints:
+  #   class: fvCEp
+  #   properties: [lcC, ip, mac, encap]
+  # Faults:
+  #   class: faultInst
+  #   properties: [ack, code, severity, delegated, descr, domain, type]
+  Subnets:
+    class: fvSubnet
+    properties: [name, ip, scope]
+  Switches:
+    class: fabricNode
+    properties: [name, role, fabricSt, serial, vendor, id]
+  Tenants:
+    class: fvTenant
+    properties: [name, dn]
+  Topology:
+    class: lldpAdjEp
+    properties: [dn, capability, chassisIdT, chassisIdV, id, mgmtIp, portDesc, portIdT,
+      portIdV, sysName, sysDesc]
