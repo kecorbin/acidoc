@@ -1,37 +1,27 @@
-
 filename: test.xlsx
-tabs : {
-        'Switches': {
-            'class' : 'fabricNode',
-            'columns' : ['name','role','fabricSt','serial','vendor','id'],
-            },
-        'Topology': {
-            'class' : 'lldpAdjEp',
-            'columns' : ['dn', 'capability', 'chassisIdT', 'chassisIdV', 'id', 'mgmtIp', 'portDesc', 'portIdT', 'portIdV', 'sysName', 'sysDesc'],
-            },
-        'Tenants': {
-            'class' : 'fvTenant',
-            'columns' : ['name','dn'],
-            },
-        'Applications': {
-            'class' : 'fvAp',
-            'columns' : ['name','dn'],
-            },
-        'Subnets': {
-            'class' : 'fvSubnet',
-            'columns' : ['name','ip','scope'],
-            },
-
-        'Endpoints': {
-            'class' : 'fvCEp',
-            'columns' : ['lcC','ip','mac','encap'],
-            },
-        'Faults': {
-            'class': 'faultInst',
-            'columns': ['ack','code','severity','delegated','descr','domain','type']
-        },
-        'Audit Logs': {
-            'class' : 'aaaModLR',
-            'columns' : ['dn','id', 'affected', 'user','severity','descr','created','cause','changeSet']
-        }
-    }
+tabs:
+  Applications:
+    class: fvAp
+    columns: [name, dn]
+  Audit Logs:
+    class: aaaModLR
+    columns: [dn, id, affected, user, severity, descr, created, cause, changeSet]
+  Endpoints:
+    class: fvCEp
+    columns: [lcC, ip, mac, encap]
+  Faults:
+    class: faultInst
+    columns: [ack, code, severity, delegated, descr, domain, type]
+  Subnets:
+    class: fvSubnet
+    columns: [name, ip, scope]
+  Switches:
+    class: fabricNode
+    columns: [name, role, fabricSt, serial, vendor, id]
+  Tenants:
+    class: fvTenant
+    columns: [name, dn]
+  Topology:
+    class: lldpAdjEp
+    columns: [dn, capability, chassisIdT, chassisIdV, id, mgmtIp, portDesc, portIdT,
+      portIdV, sysName, sysDesc]
