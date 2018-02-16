@@ -23,7 +23,7 @@ of the output is easily changed by modifying the [config.yml](config.yaml) file
  ## Methodology
 
 Everything in ACI is an object, every object is instantiated from a class which defines properties of the object.  
-Using the ACI REST API you can query for all objects of a given class, and have all objects of that class returned.  
+Using the ACI REST API you can query for all objects (and their properties) of a given class.
 
 To construct a spreadsheet, this utility creates a tab for each class query, where the columns
 are properties which you are interested in, and each row is an instance of that class
