@@ -30,6 +30,31 @@ are properties which you are interested in, and each row is an instance of that 
 
 ## configuration
 
+
+### What ACI fabric should we get the information from?
+
+First we need to authenticate to the APIC properly, we use the [acitoolkit](https://github.com/datacenter/acitoolkit) library to help
+with this.
+
+The easiest way is to set up your credentials is by adding some environment variables. If you are a mac user it would look something like this.
+
+
+```
+my-macbook-prompt ✗ export APIC_URL=https://myapic
+my-macbook-prompt ✗ export APIC_LOGIN=someuser
+my-macbook-prompt ✗ export APIC_PASSWORD=somepass
+```
+
+If you don't want to set these, the utility will also prompt the user for the required connection information at runtime.. e.g.
+
+    my-macbook ✗ python aci-doc.py
+    APIC login username: admin
+    APIC URL: https://10.94.140.72
+    APIC Password:
+    Connected to ACI
+    
+### What do we want to see?
+
 Start by defining what you want the output spreadsheet to be named.
 
 ```
@@ -81,4 +106,12 @@ The [config.yml](./config.yml) also contains several other common classes as a s
 
 Generating your spreadsheet is now a matter of running
 
-    python aci-doc.py
+    my-macbook-prompt ✗ python aci-doc.py
+    Connected to ACI
+    depending on your configuration, this could take a little while...
+    Collecting information for Switches
+    Collecting information for Subnets
+    Collecting information for Applications
+    Collecting information for Tenants
+    Collecting information for Interface Errors
+    Collecting information for Topology
