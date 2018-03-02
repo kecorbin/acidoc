@@ -52,7 +52,7 @@ If you don't want to set these, the utility will also prompt the user for the re
     APIC URL: https://10.94.140.72
     APIC Password:
     Connected to ACI
-    
+
 ### What do we want to see?
 
 Start by defining what you want the output spreadsheet to be named.
@@ -102,9 +102,10 @@ Would produce the following sheet named `Applications`
 
 The [config.yml](./config.yml) also contains several other common classes as a starting point.  
 
-## Running
 
-Generating your spreadsheet is now a matter of running
+## How Do I run this??
+
+Generating your spreadsheet is a matter of running
 
     my-macbook-prompt ✗ python aci-doc.py
     Connected to ACI
@@ -115,3 +116,10 @@ Generating your spreadsheet is now a matter of running
     Collecting information for Tenants
     Collecting information for Interface Errors
     Collecting information for Topology
+
+
+## What do I do now??
+
+Everything in ACI is an object, those objects be queried for properties and documented.
+
+For full information on the ACI Model please visit [Cisco DevNet](https://developer.cisco.com/docs/apic-mim-ref/)
